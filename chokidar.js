@@ -7,17 +7,26 @@ var watcher = chokidar.watch('./models', {
 });
 // Something to use when events are received.
 var log = console.log.bind(console);
-//Service template
-function addService(path){
+function fileInfo(path) {
     var reg = /([^<>/\\\|:""\*\?]+)\.\w+$/;
     var fileName = path.match(reg)[1];
     var serviceName = fileName.replace("Model", "Service");
     var serviceFile = `./services/${serviceName}.js`;
     var requireStr = `\r\nexports.userService = require('./${serviceName}').service;`;
-    var str =  `var baseService = require('./baseService').service;
+    return {
+        fileName: fileName,
+        serviceName: serviceName,
+        serviceFile: serviceFile,
+        requireStr: requireStr
+    }
+}
+//Service template
+function addService(path) {
+    var file = fileInfo(path);
+    var str = `var baseService = require('./baseService').service;
                 var mongoose = require('mongoose');
                 var Schema = mongoose.Schema;
-                var model = require('../models/${fileName}').model;
+                var model = require('../models/${file.fileName}').model;
                 class Service extends baseService {
                     constructor() {
                         super();
@@ -25,12 +34,20 @@ function addService(path){
                     }
                 }
                 exports.service = Service;`
-    fs.writeFileSync(serviceFile, str);
-    fs.appendFileSync('./services/services.js',requireStr);
+    fs.writeFileSync(file.serviceFile, str);
+    fs.appendFileSync('./services/services.js', file.requireStr);
 }
-
+function removeService(path) {
+    var file = fileInfo(path);
+    //删除引用
+    var data = fs.readFileSync('./services/services.js', 'utf-8');
+    var str = data.replace(file.requireStr, '');
+    fs.writeFileSync('./services/services.js', str);
+    //移除文件
+    fs.unlinkSync(file.serviceFile);
+}
 // Add event listeners.
 watcher
     .on('add', path => addService(path))
-    .on('change', path => log(`File ${path} has been changed`))
-    .on('unlink', path => log(`File ${path} has been removed`));
+    .on('unlink', path => removeService(path));
+
