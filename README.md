@@ -1,4 +1,4 @@
-为什么我用的Ritr账号提交，显示确实httpwenwen账号呢？
+为什么我用的Ritr账号提交，显示却是httpwenwen账号呢？
 # autoApi
 基于 express 的标准化、半自动化API模板
 ## 目的
@@ -20,11 +20,11 @@
 
 - 可选项
   >推荐使用[vscode][7]、[Robo 3T][8]、[sourcetree][9]
-  
+
 - 手动引用
-  >- 在models目录下新建'yourModel.js'
-  >- 在services目录下新建'yourService.js'，引用'yourModel'
-  >- 在services/services.js内引用'youService'
+  >- 在models目录下新建 `yourModel.js`
+  >- 在services目录下新建 `yourService.js`，引用 `yourModel`
+  >- 在 `services/services.js` 内引用 `youService`
 
 - 自动引用
   >- 运行 `node chokidar.js`
