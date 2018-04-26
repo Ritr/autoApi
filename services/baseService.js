@@ -15,10 +15,11 @@ class Service {
         });
     }
     /**
-     * 根据_ids批量删除
+     * 根据obj._ids批量删除
      * @param {Object} obj 
      */
     deleteMany(obj, name, callback) {
+        var result = {};
         this.entity.deleteMany({ '_id': { $in: obj._ids } }, function (err) {
             if (err) {
                 result = { 'ok': false, 'data': {}, 'message': '删除' + name + '失败' };
