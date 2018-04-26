@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 class Service {
     constructor() {
-    }
+    }    
     create(obj, name, callback) {
         var result = {};
         this.entity.create(obj, function (err) {
