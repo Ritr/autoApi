@@ -13,13 +13,23 @@
 ### 4.目前主要的功能
 >安装完成后，只需要对models进行操作，即可实现对应的基础API，启动服务后可以使用chokidar.js脚本来自动对service的引用管理，也可以手动引用
 ### 5.如何使用
-> 进入当前目录运行 `npm i`安装所需依赖包，然后运行`npm run start`运行当前程序，默认端口是`4000`
+> 进入当前目录运行 `npm i` 安装所需依赖包，然后运行 `npm run start` 运行当前程序，默认端口是 `4000` 。我已经添加好了userModel和userService以及引用完成，请求 `localhost:4000/api/user/find` 即可得到响应。
 
- - 必须项
-确保安装[monogdb][5]并且已启动，确保安装[nodejs][6]
- - 可选项
-推荐使用[vscode][7]、[Robo 3T][8]、[sourcetree][9]
+- 必须项
+  >确保安装[monogdb][5]并且已启动，确保安装[nodejs][6]
 
+- 可选项
+  >推荐使用[vscode][7]、[Robo 3T][8]、[sourcetree][9]
+  
+- 手动引用
+  >- 在models目录下新建'yourModel.js'
+  >- 在services目录下新建'yourService.js'，引用'yourModel'
+  >- 在services/services.js内引用'youService'
+
+- 自动引用
+  >- 运行 `node chokidar.js`
+  >- 在models目录下新建'yourModel.js'
+  >- `chokidar.js` 会自动监听文件变化来修改service文件
 ### 6.注意事项
 >设计schema时，要充分考虑当前的业务和未来的变动，尽量保持数据结构扁平，尽最大可能保持各个schema之间的简单关系。
 
