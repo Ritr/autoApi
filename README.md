@@ -30,10 +30,11 @@
   >- 运行 `node chokidar.js`
   >- 在models目录下新建'yourModel.js'
   >- `chokidar.js` 会自动监听文件变化来修改service文件
+- 使用manage功能
+  >- 目前正在开发过程中
 ### 6.注意事项
 >设计schema时，要充分考虑当前的业务和未来的变动，尽量保持数据结构扁平，尽最大可能保持各个schema之间的简单关系。
 
-SSH测试
 
 
   [1]: https://segmentfault.com/a/1190000010433698
