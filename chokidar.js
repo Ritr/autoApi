@@ -1,6 +1,8 @@
 const chokidar = require('chokidar');
 const fs = require('fs');
-var watcher = chokidar.watch('./models', {
+//在mac下可能需要改成 chokidar.watch('./models')
+//尚未验证
+var watcher = chokidar.watch('models', {
     ignored: /(^|[\/\\])\../,
     persistent: true,
     ignoreInitial: true
@@ -12,7 +14,7 @@ function fileInfo(path) {
     var fileName = path.match(reg)[1];
     var serviceName = fileName.replace("Model", "Service");
     var serviceFile = `./services/${serviceName}.js`;
-    var requireStr = `\r\nexports.userService = require('./${serviceName}').service;`;
+    var requireStr = `\r\nexports.${serviceName} = require('./${serviceName}').service;`;
     return {
         fileName: fileName,
         serviceName: serviceName,
@@ -24,16 +26,17 @@ function fileInfo(path) {
 function addService(path) {
     var file = fileInfo(path);
     var str = `var baseService = require('./baseService').service;
-                var mongoose = require('mongoose');
-                var Schema = mongoose.Schema;
-                var model = require('../models/${file.fileName}').model;
-                class Service extends baseService {
+               var mongoose = require('mongoose');
+               var Schema = mongoose.Schema;
+               var model = require('../models/${file.fileName}').model;
+               class Service extends baseService {
                     constructor() {
                         super();
                         this.entity = model;
                     }
                 }
-                exports.service = Service;`
+                exports.service = Service;`;
+    str = str.replace(/\s*/,'');
     fs.writeFileSync(file.serviceFile, str);
     fs.appendFileSync('./services/services.js', file.requireStr);
 }
@@ -50,4 +53,3 @@ function removeService(path) {
 watcher
     .on('add', path => addService(path))
     .on('unlink', path => removeService(path));
-
