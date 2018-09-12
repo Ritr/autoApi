@@ -1,4 +1,3 @@
-为什么我用的Ritr账号提交，显示却是httpwenwen账号呢？
 # autoApi
 基于 express 的标准化、半自动化API模板
 ## 目的
