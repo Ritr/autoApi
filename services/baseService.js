@@ -1,97 +1,37 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 class Service {
     constructor() {
     }    
-    create(obj, name, callback) {
-        var result = {};
-        this.entity.create(obj, function (err) {
-            if (err) {
-                result = { 'ok': false, 'data': {}, 'message': '创建' + name + '失败' };
-            } else {
-                result = { 'ok': true, "data": {}, 'message': '创建' + name + '成功' };
-            }
-            callback(result);
-        });
+    async create(obj){
+        return this.entity.create(obj);
     }
     /**
      * 根据obj._ids批量删除
      * @param {Object} obj 
      */
-    deleteMany(obj, name, callback) {
-        var result = {};
-        this.entity.deleteMany({ '_id': { $in: obj._ids } }, function (err) {
-            if (err) {
-                result = { 'ok': false, 'data': {}, 'message': '删除' + name + '失败' };
-            } else {
-                result = { 'ok': true, "data": {}, 'message': '删除' + name + '成功' };
-            }
-            callback(result);
-        });
+    async asyncdeleteMany(obj){
+        return this.entity.deleteMany({ '_id': { $in: obj._ids } });
     }
-    deleteOne(obj, name, callback) {
-        var result = {};
-        this.entity.deleteOne({ '_id': obj._id }, function (err) {
-            if (err) {
-                result = { 'ok': false, 'data': {}, 'message': '删除' + name + '失败' };
-            } else {
-                result = { 'ok': true, "data": {}, 'message': '删除' + name + '成功' };
-            }
-            callback(result);
-        });
+    async deleteOne(obj){
+        return this.entity.deleteOne({ '_id': obj._id });
     }
-    updateOne(obj, name, callback) {
-        var result = {};
-        this.entity.updateOne({ '_id': obj._id }, obj, function (err) {
-            if (err) {
-                result = { 'ok': false, 'data': {}, 'message': '更新' + name + '失败' };
-            } else {
-                result = { 'ok': true, "data": {}, 'message': '更新' + name + '成功' };
-            }
-            callback(result);
-        });
-    }
+    async updateOne(obj){
+        return this.entity.updateOne({ '_id': obj._id });
+    } 
     /**
      * 目前还没考虑好，批量更新的场景比较少见
      * @param {Object} obj 
      */
-    updateMany(obj, name, callback) {
-        var result = {};
+    async updateMany(obj,) {        
         if (!obj.filter || !obj.value) {
-            callback("参数不正确");
-            return;
+            return "参数不正确";
         }
-        this.entity.updateOne(obj.filter, obj.value, function (err) {
-            if (err) {
-                result = { 'ok': false, 'data': {}, 'message': '更新' + name + '失败' };
-            } else {
-                result = { 'ok': true, "data": {}, 'message': '更新' + name + '成功' };
-            }
-            callback(result);
-        });
+        return this.entity.updateOne(obj.filter, obj.value);
     }
-    findById(obj, name, callback) {
-        var result = {};
-        this.entity.find(obj._id,function(err,doc){
-            if (err) {
-                result = { 'ok': false, 'data': {}, 'message': '查询' + name + '失败' };
-            } else {
-                result = { 'ok': true, "data": doc, 'message': '查询' + name + '成功' };
-            }
-            callback(result);
-        });
+    async findById(obj) {        
+        return this.entity.find(obj._id);
     }
-    find(obj, name, callback) {
-        var result = {};
-        this.entity.find(obj,function(err,doc){
-            if (err) {
-                result = { 'ok': false, 'data': {}, 'message': '查询' + name + '失败' };
-            } else {
-                result = { 'ok': true, "data": doc, 'message': '查询' + name + '成功' };
-            }
-            callback(result);
-        });
+    async find(obj) {        
+        return this.entity.find(obj);
     }
-
 }
 exports.service = Service;

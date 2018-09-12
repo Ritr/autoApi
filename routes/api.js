@@ -28,9 +28,12 @@ router.post('/:name?/:method?', function (req, res, next) {
         res.json("请求参数错误");
         return;
     }
-    service[method](obj, name, function (result) {
+    service[method](obj, name).then(result => {      
+        result.status = 0;
         res.json(result);
-    });
-    return;
+    }).catch(result => {
+        result.status = 1; 
+        res.json(result);
+    });    
 });
 module.exports = router;
